@@ -1,45 +1,36 @@
-import * as moduleAlias from 'module-alias';
-import logger from '@utils/logger';
-const srcPath = 'src';
-moduleAlias.addAliases({
-  "@config": `${srcPath}/config`,
-      "@handlers": `${srcPath}/handlers`,
-      "@libs": `${srcPath}/libs`,
-      "@middleware": `${srcPath}/middleware`,
-      "@models": `${srcPath}/dao/models`,
-      "@routes": `${srcPath}/routes`,
-      "@utils": `${srcPath}/utils`,
-      "@dao": `${srcPath}/dao`
-});
+import express from 'express';
+const router  = express.Router();
 
-import { createServer } from '@config/express';
-import { AddressInfo } from 'net';
-import http from 'http';
 
-const host = process.env.HOST || '0.0.0.0';
-const port = process.env.PORT || 3001;
-const startServer = () => {
-  const app = createServer();
-  const server = http.createServer(app);
-  server.listen({host, port}, () => {
-    const address = server.address() as AddressInfo;
-    logger.info(`Server is running on http://${address.address}:${address.port}`);
-  });
-  const signalTraps: NodeJS.Signals[] = ['SIGTERM', 'SIGINT', 'SIGUSR2'];
-  signalTraps.forEach((type) => {
-    process.once(type, async ()=> {
-      try {
-        logger.info(`Process ${type} signal received`);
-        logger.info('Closing http server');
-        server.close();
-        logger.info('Http server closed');
-        process.exit(0);
-      } catch (error) {
-        console.error(`Error occurred while closing http server: ${error}`);
-        process.exit(1);
-      }
-    });
-  });
-};
 
-startServer();
+// REST API
+// Internet  ->  HTTP  ->  REST API JSON ->  DB
+// SOAP XML wsdl
+// {} -> JSON
+// [] -> JSON
+// { llave : valor }
+// valor: texto, numérico, booleano, array [valores], objeto {llave:valor}
+
+// REST stateless, resource unique representation
+// CRUD Create, Read, Update, Delete
+//      POST, GET, PUT, DELETE
+
+// http://localhost:3001
+router.get('/', (_req, res) => {
+  res.json({msg:'Hello World!'});
+ });
+
+// http://localhost:3001/version
+router.get('/version', (_req, res)=>{
+  const version: string = "1.0.0";
+  const jsonResp = {"name":"FODA Be", "version": version};
+  // string, number, boolean, types, interfaces, classes, enumerators
+  res.json(jsonResp);
+ });
+
+import empresasRouter from './empresas/empresas';
+router.use('/empresas', empresasRouter);
+
+ //router.get  router.post router.put router.delete  router.use
+
+export default router;
