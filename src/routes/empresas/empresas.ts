@@ -4,7 +4,9 @@ import { EmpresasDao } from '@dao/models/Empresas/EmpresasDao';
 import { MongoDBConn } from '@dao/MongoDBConn';
 import { IEmpresa } from '@dao/models/Empresas/IEmpresas';
 import { Empresas } from '@libs/Empresas/Empresas';
+
 const empresasDao = new EmpresasDao(MongoDBConn);
+
 let empresasModel:Empresas;
 empresasDao.init().then(()=>{
   empresasModel = new Empresas(empresasDao);
@@ -100,10 +102,5 @@ router.delete('/del/:id', async (req, res)=>{
   }
   return res.status(404).json({"error":"No se pudo eliminar Empresa"});
 });
-/*
-router.get('/', function(_req, res){
-
-});
- */
 
 export default router;

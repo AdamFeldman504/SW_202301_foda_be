@@ -1,5 +1,6 @@
 import { IEmpresa } from "@dao/models/Empresas/IEmpresas";
 import { IDataAccessObject } from "@dao/IDataAccessObject";
+
 export class Empresas {
   private dao: IDataAccessObject;
   constructor(dao: IDataAccessObject) {
